@@ -1,6 +1,5 @@
 import express from 'express';
 import userRoutes from './routes/userRoutes';
-//import authRoutes from './routes/authRoutes';
 import connectDB from './config/mongo';
 
 const app = express();

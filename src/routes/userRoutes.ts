@@ -1,6 +1,6 @@
 // src/routes/userRoutes.ts
 import { Router } from 'express';
-import { getUsers, registerUser } from '../controlers/userController';
+import { getUsers, registerUser } from '../controlers/rescatistaController';
 //import { registerUser } from '../controllers/userController';
 
 const router = Router();
