@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
   res.send('Hello, TypeScript!');
 });
 
-app.use('/users', userRoutes);
+app.use('/', userRoutes);
 //app.use('/auth', authRoutes);
 
 app.listen(PORT, () => {

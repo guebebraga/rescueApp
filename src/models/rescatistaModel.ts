@@ -8,9 +8,9 @@ export interface IRescatista extends Document {
     email: string;
     telefono: string;
     direccion: string;
-    fechaNacimiento: Date;
+    fechaNacimiento: string;
     farmaciaDeReferencia: string;
-    foto?: string; // Campo opcional para la foto
+   /* foto?: string; // Campo opcional para la foto*/
 }
 
 // Esquema de Mongoose para Rescatista
@@ -46,17 +46,17 @@ const RescatistaSchema: Schema = new Schema({
         required: [true, 'La dirección es requerida'],
     },
     fechaNacimiento: {
-        type: Date,
+        type: String,
         required: [false, 'No importa si no queres completar este campo'],
     },
     farmaciaDeReferencia: {
         type: String,
         required: [true, 'La farmacia de referencia es requerida'],
     },
-    foto: {
+    /*foto: {
         type: String,
         required: false, // La foto es opcional
-    },
+    },*/
 }, {
     timestamps: true,
 });
