@@ -1,14 +1,15 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import Rescatista, { IRescatista } from '../models/rescatistaModel';
-//import upload from '../config/upload';
+import upload from '../config/upload';
 
 const saltRounds = 10;
 
 export const registerUser = [
-  /*upload.single('foto'), // Middleware de Multer para manejar la subida del archivo*/
+  upload.single('foto'), // Middleware de Multer para manejar la subida del archivo*/
+
   async (req: Request, res: Response) => {
-    const { username, password, nombre, email, telefono, direccion, fechaNacimiento, farmaciaDeReferencia } = req.body;
+    const { username, password, nombre, email, telefono, direccion, fechaNacimiento, farmaciaDeReferencia/*, foto*/ } = req.body;
 
     if (!username || !password) {
       return res.status(400).send('El nombre de usuario y la contraseña son requeridos');
@@ -21,7 +22,7 @@ export const registerUser = [
       }
 
       const hashedPassword = await bcrypt.hash(password, saltRounds);
-      /*const foto = req.file?.path; // Ruta de la imagen subida a Cloudinary*/
+      const foto = req.file?.path; // Ruta de la imagen subida a Cloudinary*/
 
       const newRescatista: IRescatista = new Rescatista({
         username,
@@ -32,9 +33,9 @@ export const registerUser = [
         direccion,
         fechaNacimiento,
         farmaciaDeReferencia,
-        /*foto*/
+        foto
       });
-      console.log(username,password,nombre,email,telefono,direccion,fechaNacimiento,farmaciaDeReferencia)
+      console.log(username,password,nombre,email,telefono,direccion,fechaNacimiento,farmaciaDeReferencia, foto)
       await newRescatista.save();
       res.status(201).send('Usuario registrado con éxito');
     } catch (error) {
