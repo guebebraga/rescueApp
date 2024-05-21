@@ -9,8 +9,8 @@ export interface IRescatista extends Document {
     telefono: string;
     direccion: string;
     fechaNacimiento: string;
-    farmaciaDeReferencia: string;
-    foto?: string; // Campo opcional para la foto*/
+    vetDeReferencia: mongoose.Schema.Types.ObjectId; // Cambio aquí
+    foto?: string;
 }
 
 // Esquema de Mongoose para Rescatista
@@ -39,20 +39,18 @@ const RescatistaSchema: Schema = new Schema({
     telefono: {
         type: String,
         required: [true, 'El número de teléfono es requerido'],
-        /*match: [/^\+?\d{10,15}$/, 'Por favor ingrese un número de teléfono válido'],*/
     },
     direccion: {
         type: String,
-       /* required: [true, 'La dirección es requerida'],*/
     },
     fechaNacimiento: {
         type: String,
-        /*required: [false, 'No importa si no queres completar este campo'],*/
     },
-    farmaciaDeReferencia: {
-        type: String,
-       /* required: [true, 'La farmacia de referencia es requerida'],*/
-    },
+    vetDeReferencia: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Vet',
+        required: true, // La farmacia de referencia es ahora requerida
+    }, 
     foto: {
         type: String,
         required: false, // La foto es opcional
@@ -64,4 +62,3 @@ const RescatistaSchema: Schema = new Schema({
 // Exportar el modelo
 const Rescatista = mongoose.model<IRescatista>('Rescatista', RescatistaSchema);
 export default Rescatista;
-

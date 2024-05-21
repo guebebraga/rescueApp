@@ -1,5 +1,6 @@
 import express from 'express';
 import userRoutes from './routes/userRoutes';
+import vetRoutes from './routes/vetRoutes'
 import connectDB from './config/mongo';
 
 const app = express();
@@ -15,7 +16,8 @@ app.get('/', (req, res) => {
 });
 
 app.use('/', userRoutes);
-//app.use('/auth', authRoutes);
+app.use('/', vetRoutes);
+app.use('/', userRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
