@@ -1,6 +1,5 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
-// Interfaz para el esquema de rescatista
 export interface IRescatista extends Document {
     nombre: string;
     username: string;
@@ -13,7 +12,6 @@ export interface IRescatista extends Document {
     foto?: string;
 }
 
-// Esquema de Mongoose para Rescatista
 const RescatistaSchema: Schema = new Schema({
     nombre: {
         type: String,
@@ -59,6 +57,5 @@ const RescatistaSchema: Schema = new Schema({
     timestamps: true,
 });
 
-// Exportar el modelo
 const Rescatista = mongoose.model<IRescatista>('Rescatista', RescatistaSchema);
 export default Rescatista;

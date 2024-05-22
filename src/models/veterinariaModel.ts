@@ -1,6 +1,5 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
-// Interfaz para el esquema de rescatista
 export interface IVet extends Document {
     nombre: string;
     username: string;
@@ -8,10 +7,9 @@ export interface IVet extends Document {
     email: string;
     telefono: string;
     direccion: string;
-    foto?: string; // Campo opcional para la foto*/
+    foto?: string; 
 }
 
-// Esquema de Mongoose para Farmacia
 const VetSchema: Schema = new Schema({
     nombre: {
         type: String,
@@ -45,13 +43,12 @@ const VetSchema: Schema = new Schema({
     },
     foto: {
         type: String,
-        required: false, // La foto es opcional
+        required: false, 
     }
 }, {
     timestamps: true,
 });
 
-// Exportar el modelo
 const Vet = mongoose.model<IVet>('Vet', VetSchema);
 export default Vet;
 
