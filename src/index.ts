@@ -21,6 +21,11 @@ app.use('/', userRoutes);
 app.use('/', vetRoutes);
 app.use('/', userRoutes);
 app.use('/', animalRoutes);
+app.use('/', animalRoutes);
+app.use('/', animalRoutes);
+app.use('/', animalRoutes);
+app.use('/', animalRoutes);
+app.use('/', animalRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

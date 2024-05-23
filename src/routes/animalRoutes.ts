@@ -5,8 +5,10 @@ import { getAnimal, getAnimals, registerAnimal} from '../controlers/animalContro
 const router = Router();
 
 
-router.get('/animal', getAnimal);
 router.post('/registerAnimal', registerAnimal);
-router.get('/users', getAnimals);
+
+router.get('/animal', getAnimal);
+
+router.get('/animals', getAnimals);
 
 export default router;

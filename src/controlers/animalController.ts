@@ -8,25 +8,14 @@ export const registerAnimal = [
   upload.single('foto'), // Middleware de Multer para manejar la subida del archivo
 
   async (req: Request, res: Response) => {
-    const { nombre, edad, vetDeReferencia, rescatistaDeReferencia, } = req.body;
+    const { nombre, edad, rescatistaDeReferencia, } = req.body;
 
-    try {
-      /*const existingVet = await Vet.findById(vetDeReferencia);
-      if (!existingVet) {
-        return res.status(400).send('La farmacia de referencia no existe');
-      }
-      const existingResc = await Vet.findById(rescatistaDeReferencia);
-      if (!existingResc) {
-        return res.status(400).send('El rescatista de referencia no existe');
-      }
-      */
-      
+    try { 
       const foto = req.file?.path; // Ruta de la imagen subida a Cloudinary
 
       const newAnimal: IAnimal = new Animal({
         nombre,
         edad,
-        vetDeReferencia,
         rescatistaDeReferencia,
         foto
       });
@@ -43,7 +32,10 @@ export const getAnimal = async (req: Request, res: Response) => {
   try {
     const _id = req.body._id;
     const animal = await Animal.findOne({ _id }).populate({
-      path: 'vetDeReferencia, rescatistaDeReferencia '// esto púede estar mal 
+      path: 'rescatistaDeReferencia',
+      populate: {
+        path: 'vetDeReferencia'
+      }
     });
     res.status(200).json(animal);
   } catch (error) {
@@ -52,10 +44,16 @@ export const getAnimal = async (req: Request, res: Response) => {
 };
 
 
+
 export const getAnimals = async (req: Request, res: Response) => {
   try {
-    const animal = await Animal.find().populate('rescatistaDeReferencia');
-    res.status(200).json(animal);
+    const animals = await Animal.find({}).populate({
+      path: 'rescatistaDeReferencia',
+      populate: {
+        path: 'vetDeReferencia'
+      }
+    });
+    res.status(200).json(animals);
   } catch (error) {
     res.status(500).json({ message: 'Error al obtener los bichos' });
   }
