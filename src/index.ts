@@ -2,6 +2,7 @@ import express from 'express';
 import userRoutes from './routes/userRoutes';
 import vetRoutes from './routes/vetRoutes'
 import animalRoutes from './routes/animalRoutes'
+import refugioRoutes from './routes/refugioRoutes'
 import connectDB from './config/mongo';
 //importar cors
 
@@ -25,6 +26,9 @@ app.use('/', animalRoutes);
 app.use('/', animalRoutes);
 app.use('/', animalRoutes);
 app.use('/', animalRoutes);
+app.use('/', animalRoutes);
+app.use('/', refugioRoutes);
+app.use('/', refugioRoutes);
 app.use('/', animalRoutes);
 
 app.listen(PORT, () => {

@@ -8,7 +8,7 @@ export const registerAnimal = [
   upload.single('foto'), // Middleware de Multer para manejar la subida del archivo
 
   async (req: Request, res: Response) => {
-    const { nombre, edad, rescatistaDeReferencia, } = req.body;
+    const { nombre, edad, rescatistaDeReferencia, tamaño } = req.body;
 
     try { 
       const foto = req.file?.path; // Ruta de la imagen subida a Cloudinary
@@ -16,6 +16,7 @@ export const registerAnimal = [
       const newAnimal: IAnimal = new Animal({
         nombre,
         edad,
+        tamaño,
         rescatistaDeReferencia,
         foto
       });
@@ -58,3 +59,28 @@ export const getAnimals = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Error al obtener los bichos' });
   }
 };
+
+
+export const getAnimalesPorTamaño = async (req: Request, res: Response) => {
+  try {
+    const { tamaño } = req.body; 
+
+    if (!['pequeño', 'mediano', 'grande'].includes(tamaño)) {
+      return res.status(400).json({ message: 'Tamaño inválido' });
+    }
+
+    const animales = await Animal.aggregate([
+      {
+        $match: {
+          tamaño: tamaño
+        }
+      }
+    ]);
+
+    res.status(200).json(animales);
+  } catch (error) {
+    console.error('Error al obtener animales por tamaño:', error);
+    res.status(500).json({ message: 'Error al obtener animales' });
+  }
+};
+
