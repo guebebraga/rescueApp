@@ -6,7 +6,7 @@ export interface IAnimal extends Document {
     foto?: string;
     tamaño: 'pequeño' | 'mediano' | 'grande'; // Solo estos tres tamaños son permitidos
     rescatistaDeReferencia?: mongoose.Schema.Types.ObjectId; 
-    refugioDeReferencia?: mongoose.Schema.Types.ObjectId; 
+    refugioDeReferencia?: mongoose.Schema.Types.ObjectId; // agregar refugio de referencia 
     vetDeReferencia?: mongoose.Schema.Types.ObjectId;
 }
 

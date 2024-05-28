@@ -1,12 +1,11 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import Rescatista, { IRescatista } from '../models/rescatistaModel';
-import Vet from '../models/veterinariaModel';
+import User, { IUser } from '../models/userModel';
 import upload from '../config/upload';
 
 const saltRounds = 10;
 
-export const registerRescatista = [
+export const registerUser = [
   upload.single('foto'), // Middleware de Multer para manejar la subida del archivo
 
   async (req: Request, res: Response) => {
@@ -17,20 +16,22 @@ export const registerRescatista = [
     }
 
     try {
-      const existingUser = await Rescatista.findOne({ username });
+      const existingUser = await User.findOne({ username });
       if (existingUser) {
         return res.status(400).send('El usuario ya existe');
       }
 
-      const existingVet = await Vet.findById(vetDeReferencia);
+      if(vetDeReferencia){
+      const existingVet = await User.findById(vetDeReferencia);
       if (!existingVet) {
-        return res.status(400).send('La farmacia de referencia no existe');
+        return res.status(400).send('La vet de referencia no existe');
       }
+    }
 
       const hashedPassword = await bcrypt.hash(password, saltRounds);
       const foto = req.file?.path; // Ruta de la imagen subida a Cloudinary
 
-      const newRescatista: IRescatista = new Rescatista({
+      const newUser: IUser = new User({
         username,
         password: hashedPassword,
         nombre,
@@ -42,7 +43,7 @@ export const registerRescatista = [
         foto
       });
 
-      await newRescatista.save();
+      await newUser.save();
       res.status(201).send('Usuario registrado con éxito');
     } catch (error) {
       res.status(500).send('Error al registrar el usuario');
@@ -50,25 +51,28 @@ export const registerRescatista = [
   }
 ];
 
-export const getRescatista = async (req: Request, res: Response) => {
+export const getUser = async (req: Request, res: Response) => {
   try {
     const _id = req.body._id;
-    const user = await Rescatista.findOne({ _id }).select('-password -username -_id').populate({
+    const user = await User.findOne({ _id }).select('-password -username -_id').populate({
       path: 'vetDeReferencia',
+      model: 'User',
       select: '-password -username -_id' // Excluye los campos password, username y _id
     });
     res.status(200).json(user);
   } catch (error) {
-    res.status(500).json({ message: 'Error al obtener rescatista' });
+    res.status(500).json({ message: 'Error al obtener user' });
   }
 };
 
 
-
-// Obtener todos los usuarios
-export const getRescatistas = async (req: Request, res: Response) => {
+export const getUsers = async (req: Request, res: Response) => {
   try {
-    const users = await Rescatista.find()//.populate('farmaciaDeReferencia');
+    const users = await User.find({}).populate({
+        path: 'vetDeReferencia',
+        model: 'User', // Specify that the reference is to the User model
+        select: '-password -username -_id' // Excluye los campos password, username y _id
+      });
     res.status(200).json(users);
   } catch (error) {
     res.status(500).json({ message: 'Error al obtener los usuarios' });

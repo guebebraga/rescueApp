@@ -8,7 +8,7 @@ export const registerAnimal = [
   upload.single('foto'), // Middleware de Multer para manejar la subida del archivo
 
   async (req: Request, res: Response) => {
-    const { nombre, edad, rescatistaDeReferencia, tamaño } = req.body;
+    const { nombre, edad, userDeReferencia, tamaño } = req.body;
 
     try { 
       const foto = req.file?.path; // Ruta de la imagen subida a Cloudinary
@@ -17,7 +17,7 @@ export const registerAnimal = [
         nombre,
         edad,
         tamaño,
-        rescatistaDeReferencia,
+        userDeReferencia,
         foto
       });
 
@@ -33,7 +33,7 @@ export const getAnimal = async (req: Request, res: Response) => {
   try {
     const _id = req.body._id;
     const animal = await Animal.findOne({ _id }).populate({
-      path: 'rescatistaDeReferencia',
+      path: 'userDeReferencia',
       populate: {
         path: 'vetDeReferencia'
       }
