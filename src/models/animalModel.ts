@@ -1,13 +1,11 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Schema, model } from 'mongoose';
 
 export interface IAnimal extends Document {
     nombre: string;
     edad: string;
     foto?: string;
     tamaño: 'pequeño' | 'mediano' | 'grande'; // Solo estos tres tamaños son permitidos
-    rescatistaDeReferencia?: mongoose.Schema.Types.ObjectId; 
-    refugioDeReferencia?: mongoose.Schema.Types.ObjectId; // agregar refugio de referencia 
-    vetDeReferencia?: mongoose.Schema.Types.ObjectId;
+    userDeReferencia?: mongoose.Schema.Types.ObjectId;
 }
 
 const AnimalSchema: Schema = new Schema({
@@ -28,14 +26,9 @@ const AnimalSchema: Schema = new Schema({
         enum: ['pequeño', 'mediano', 'grande'], // Solo permite estos tres valores
         required: [true, 'El tamaño es requerido'],
     },
-    rescatistaDeReferencia: {
+    userDeReferencia: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Rescatista',
-        required: false, 
-    }, 
-    vetDeReferencia: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Vet',
+        ref: 'User',
         required: false, 
     }, 
 }, {

@@ -2,6 +2,12 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import User, { IUser } from '../models/userModel';
 import upload from '../config/upload';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+
+dotenv.config()
+
+const JWT_SECRET = process.env.TOKEN_SECRET || 'your_jwt_secret'; // Deberías guardar esto en un archivo de configuración o en una variable de entorno
 
 const saltRounds = 10;
 
@@ -9,7 +15,7 @@ export const registerUser = [
   upload.single('foto'), // Middleware de Multer para manejar la subida del archivo
 
   async (req: Request, res: Response) => {
-    const { username, password, nombre, email, telefono, direccion, fechaNacimiento, vetDeReferencia } = req.body;
+    const { username, password, nombre, email, telefono, direccion, vetDeReferencia, rol} = req.body;
 
     if (!username || !password) {
       return res.status(400).send('El nombre de usuario y la contraseña son requeridos');
@@ -38,9 +44,9 @@ export const registerUser = [
         email,
         telefono,
         direccion,
-        fechaNacimiento,
         vetDeReferencia,
-        foto
+        foto,
+        rol
       });
 
       await newUser.save();
@@ -78,3 +84,47 @@ export const getUsers = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Error al obtener los usuarios' });
   }
 };
+
+
+
+export const login = async (req: Request, res: Response) => {
+    const { email, password } = req.body;
+
+    try {
+        // Check if user exists
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ message: 'Correo electrónico o contraseña incorrectos' });
+        }
+
+        // Check if password is correct
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ message: 'Correo electrónico o contraseña incorrectos' });
+        }
+
+        // Create JWT payload
+        const payload = {
+            userId: user._id,
+            nombre: user.nombre,
+            username: user.username,
+            email: user.email,
+            rol: user.rol,
+        };
+
+        // Sign JWT
+        const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
+
+        res.json({ token });
+    } catch (err) {
+        res.status(500).json({ message: 'Error del servidor' });
+    }
+};
+
+
+
+
+
+
+
+

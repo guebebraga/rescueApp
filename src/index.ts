@@ -5,6 +5,10 @@ import animalRoutes from './routes/animalRoutes';
 import refugioRoutes from './routes/refugioRoutes';
 import userRoutes from './routes/userRoutes';
 import connectDB from './config/mongo';
+/// <reference path="./custom.d.ts" />
+
+
+
 //importar cors
 
 const app = express();

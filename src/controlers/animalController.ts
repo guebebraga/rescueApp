@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import Animal, { IAnimal } from '../models/animalModel';
 import Vet from '../models/veterinariaModel';
 import upload from '../config/upload';
+import User from '../models/userModel';
 
 
 export const registerAnimal = [
@@ -49,21 +50,22 @@ export const getAnimal = async (req: Request, res: Response) => {
 export const getAnimals = async (req: Request, res: Response) => {
   try {
     const animals = await Animal.find({}).populate({
-      path: 'rescatistaDeReferencia',
+      path: 'userDeReferencia',
       populate: {
-        path: 'vetDeReferencia'
+        path: 'vetDeReferencia',
+        model: 'User' // Especificar el modelo de referencia
       }
     });
     res.status(200).json(animals);
   } catch (error) {
+    console.error('Error al obtener los animales:', error);
     res.status(500).json({ message: 'Error al obtener los bichos' });
   }
 };
 
-
 export const getAnimalesPorTamaño = async (req: Request, res: Response) => {
   try {
-    const { tamaño } = req.body; 
+    const { tamaño } = req.body;
 
     if (!['pequeño', 'mediano', 'grande'].includes(tamaño)) {
       return res.status(400).json({ message: 'Tamaño inválido' });
@@ -74,6 +76,34 @@ export const getAnimalesPorTamaño = async (req: Request, res: Response) => {
         $match: {
           tamaño: tamaño
         }
+      },
+      {
+        $lookup: {
+          from: 'users', // Nombre de la colección de usuarios
+          localField: 'userDeReferencia',
+          foreignField: '_id',
+          as: 'userDeReferencia'
+        }
+      },
+      {
+        $unwind: {
+          path: '$userDeReferencia',
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $lookup: {
+          from: 'users', // Nombre de la colección de usuarios
+          localField: 'userDeReferencia.vetDeReferencia',
+          foreignField: '_id',
+          as: 'vetDeReferencia'
+        }
+      },
+      {
+        $unwind: {
+          path: '$vetDeReferencia',
+          preserveNullAndEmptyArrays: true
+        }
       }
     ]);
 
@@ -83,4 +113,3 @@ export const getAnimalesPorTamaño = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Error al obtener animales' });
   }
 };
-

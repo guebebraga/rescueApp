@@ -1,4 +1,3 @@
-
 import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IUser extends Document {
@@ -8,10 +7,9 @@ export interface IUser extends Document {
     email: string;
     telefono: string;
     direccion: string;
-    fechaNacimiento: string; // Changed to Date type for better consistency
     vetDeReferencia?: mongoose.Schema.Types.ObjectId;
     foto?: string;
-    //agregar al modelo tipo de user rescatista refugio o veterinaria 
+    rol: 'persona' | 'refugio' | 'veterinaria'; // Agrege campo rol con las tres opciones
 }
 
 const UserSchema: Schema = new Schema({
@@ -43,17 +41,19 @@ const UserSchema: Schema = new Schema({
     direccion: {
         type: String,
     },
-    fechaNacimiento: {
-        type: String, // Changed to Date type for better consistency
-    },
     vetDeReferencia: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', // Referencing the same User model
-        required: false, // The reference vet is optional
-    }, 
+        ref: 'User', // Hace referencia al mismo modelo user
+        required: false, // La vet de referencia es opcional 
+    },
     foto: {
         type: String,
-        required: false, // The photo is optional
+        required: false, //La foto es opcional 
+    },
+    rol: {
+        type: String,
+        enum: ['persona', 'refugio', 'veterinaria'], // Solo permite estos tres valores
+        required: [true, 'El rol es requerido'],
     }
 }, {
     timestamps: true,
