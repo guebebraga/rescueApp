@@ -1,11 +1,11 @@
+// src/middlewares/logged.ts
 import dotenv from 'dotenv';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
-import { IUser } from '../models/userModel';
 
 dotenv.config();
 
-export interface UserPayload extends JwtPayload {
+interface UserPayload extends JwtPayload {
     userId: string;
     nombre: string;
     username: string;

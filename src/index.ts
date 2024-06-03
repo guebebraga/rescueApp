@@ -1,3 +1,4 @@
+/// <reference path="./custom.d.ts" />
 import express from 'express';
 import rescatistaRoutes from './routes/rescatistaRoutes';
 import vetRoutes from './routes/vetRoutes';
@@ -5,8 +6,6 @@ import animalRoutes from './routes/animalRoutes';
 import refugioRoutes from './routes/refugioRoutes';
 import userRoutes from './routes/userRoutes';
 import connectDB from './config/mongo';
-/// <reference path="./custom.d.ts" />
-
 
 
 //importar cors
@@ -35,6 +34,7 @@ app.use('/', animalRoutes);
 app.use('/', refugioRoutes);
 app.use('/', refugioRoutes);
 app.use('/', animalRoutes);
+app.use('/', userRoutes)
 app.use('/', userRoutes)
 
 app.listen(PORT, () => {

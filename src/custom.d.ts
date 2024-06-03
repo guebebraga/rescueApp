@@ -1,4 +1,5 @@
-import { UserPayload } from './middlewares/logged'; // Ajusta la ruta según tu estructura de proyecto
+// src/custom.d.ts
+import { UserPayload } from './middlewares/logged';
 
 declare global {
     namespace Express {
@@ -7,3 +8,4 @@ declare global {
         }
     }
 }
+

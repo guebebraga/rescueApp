@@ -7,7 +7,7 @@ import dotenv from 'dotenv';
 
 dotenv.config()
 
-const JWT_SECRET = process.env.TOKEN_SECRET || 'your_jwt_secret'; // Deberías guardar esto en un archivo de configuración o en una variable de entorno
+const JWT_SECRET = process.env.TOKEN_SECRET || 'your_jwt_secret'; 
 
 const saltRounds = 10;
 
