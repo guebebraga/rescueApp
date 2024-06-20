@@ -15,7 +15,7 @@ export interface IRescatista extends Document {
 const RescatistaSchema: Schema = new Schema({
     nombre: {
         type: String,
-        required: [true, 'El nombre es requerido'],
+        required: [false, 'El nombre no es requerido'],
     },
     username: {
         type: String,
